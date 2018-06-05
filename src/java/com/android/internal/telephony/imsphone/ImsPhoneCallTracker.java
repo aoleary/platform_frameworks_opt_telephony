@@ -2603,12 +2603,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 if (conn.getDisconnectCause() == DisconnectCause.NOT_DISCONNECTED) {
                     if (isHandoverToWifi) {
                         removeMessages(EVENT_CHECK_FOR_WIFI_HANDOVER);
+
                         if (mNotifyHandoverVideoFromLTEToWifi && mHasPerformedStartOfCallHandover) {
                             // This is a handover which happened mid-call (ie not the start of call
                             // handover from LTE to WIFI), so we'll notify the InCall UI.
                             conn.onConnectionEvent(
                                     TelephonyManager.EVENT_HANDOVER_VIDEO_FROM_LTE_TO_WIFI, null);
                         }
+
                         // We are on WIFI now so no need to get notified of network availability.
                         unregisterForConnectivityChanges();
                     } else if (isHandoverFromWifi && imsCall.isVideoCall()) {
@@ -2618,6 +2620,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                         registerForConnectivityChanges();
                     }
                 }
+
                 if (isHandoverFromWifi && imsCall.isVideoCall()) {
                     if (mNotifyHandoverVideoFromWifiToLTE && mIsDataEnabled) {
                         if (conn.getDisconnectCause() == DisconnectCause.NOT_DISCONNECTED) {
@@ -2641,6 +2644,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             } else {
                 loge("onCallHandover :: connection null.");
             }
+
             if (!mHasPerformedStartOfCallHandover) {
                 mHasPerformedStartOfCallHandover = true;
             }
